@@ -1,13 +1,15 @@
 Summary: Database Independent Abstraction Layer for C
 Name: libdbi
 Version: 0.8.3
-Release: 3.1%{?dist}
+Release: 4%{?dist}
 Group: Development/Libraries
 License: LGPLv2+
 URL: http://libdbi.sourceforge.net/
 
 Source: http://prdownloads.sourceforge.net/libdbi/%{name}-%{version}.tar.gz
+
 Patch1: libdbi-cflags.patch
+Patch2: libdbi-leak.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: autoconf openjade docbook-style-dsssl
@@ -40,6 +42,7 @@ needed to develop applications with libdbi.
 %setup -q -n %{name}-%{version}
 
 %patch1 -p1
+%patch2 -p1
 
 autoconf
 
@@ -78,6 +81,10 @@ rm -f ${RPM_BUILD_ROOT}%{_libdir}/libdbi.la
 %{_libdir}/libdbi.so
 
 %changelog
+* Fri Sep 14 2012 Tom Lane <tgl@redhat.com> 0.8.3-4
+- Fix memory leak due to incorrect test in _is_row_fetched()
+Resolves: #733413
+
 * Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 0.8.3-3.1
 - Rebuilt for RHEL 6
 
