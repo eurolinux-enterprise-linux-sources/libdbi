@@ -1,7 +1,7 @@
 Summary: Database Independent Abstraction Layer for C
 Name: libdbi
 Version: 0.8.4
-Release: 4%{?dist}
+Release: 6%{?dist}
 Group: Development/Libraries
 License: LGPLv2+
 URL: http://libdbi.sourceforge.net/
@@ -81,6 +81,12 @@ rm -rf ${RPM_BUILD_ROOT}%{_docdir}/%{name}-%{version}
 %{_libdir}/libdbi.so
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.8.4-6
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.8.4-5
+- Mass rebuild 2013-12-27
+
 * Mon Jul 29 2013 Honza Horak <hhorak@redhat.com> - 0.8.4-4
 - Spec file clean-up
 - Add aarch64 support
