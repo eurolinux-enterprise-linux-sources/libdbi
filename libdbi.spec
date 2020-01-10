@@ -1,6 +1,6 @@
 Summary: Database Independent Abstraction Layer for C
 Name: libdbi
-Version: 0.8.3
+Version: 0.8.4
 Release: 4%{?dist}
 Group: Development/Libraries
 License: LGPLv2+
@@ -10,9 +10,10 @@ Source: http://prdownloads.sourceforge.net/libdbi/%{name}-%{version}.tar.gz
 
 Patch1: libdbi-cflags.patch
 Patch2: libdbi-leak.patch
+Patch3: libdbi-version.patch
+Patch4: libdbi-aarch64.patch
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: autoconf openjade docbook-style-dsssl
+BuildRequires: openjade docbook-style-dsssl
 Conflicts: libdbi-dbd-mysql < 0.8
 Conflicts: libdbi-dbd-pgsql < 0.8
 
@@ -35,16 +36,13 @@ Requires:	%{name} = %{version}-%{release}
 The libdbi-devel package contains the header files and documentation
 needed to develop applications with libdbi.
 
-%clean 
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-
 %prep
 %setup -q -n %{name}-%{version}
 
 %patch1 -p1
 %patch2 -p1
-
-autoconf
+%patch3 -p1
+%patch4 -p1
 
 %build
 %configure
@@ -52,18 +50,21 @@ autoconf
 make %{?_smp_mflags}
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 
 rm -f ${RPM_BUILD_ROOT}%{_libdir}/libdbi.a
 rm -f ${RPM_BUILD_ROOT}%{_libdir}/libdbi.la
+
+# we will include generated documentation in -devel subpackage,
+# so we need to remove it from builddir, since it would be included
+# automatically otherwise
+rm -rf ${RPM_BUILD_ROOT}%{_docdir}/%{name}-%{version}
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING
@@ -71,22 +72,42 @@ rm -f ${RPM_BUILD_ROOT}%{_libdir}/libdbi.la
 %{_libdir}/libdbi.so.*
 
 %files devel
-%defattr(-,root,root)
 %doc TODO
 %doc doc/programmers-guide.pdf
 %doc doc/programmers-guide/
 %doc doc/driver-guide.pdf
 %doc doc/driver-guide/
-/usr/include/dbi/
+%{_includedir}/dbi/
 %{_libdir}/libdbi.so
 
 %changelog
-* Fri Sep 14 2012 Tom Lane <tgl@redhat.com> 0.8.3-4
-- Fix memory leak due to incorrect test in _is_row_fetched()
-Resolves: #733413
+* Mon Jul 29 2013 Honza Horak <hhorak@redhat.com> - 0.8.4-4
+- Spec file clean-up
+- Add aarch64 support
+- Remove generated doc to not be included automatically
 
-* Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 0.8.3-3.1
-- Rebuilt for RHEL 6
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Mon Jul 23 2012 Tom Lane <tgl@redhat.com> 0.8.4-2
+- Prevent undesirable change in library soname version number
+
+* Sun Jul 22 2012 Tom Lane <tgl@redhat.com> 0.8.4-1
+- Update to version 0.8.4 (seems to contain only configure-support updates,
+  but might as well adopt it)
+- Fix memory leak due to incorrect test in _is_row_fetched()
+Related: #733413
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.3-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Fri Sep  3 2010 Tom Lane <tgl@redhat.com> 0.8.3-4
+- Do not use -ffast-math; it breaks things and seems quite unlikely to offer
+  any useful performance benefit for this type of package, anyway
+Resolves: #629964
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild

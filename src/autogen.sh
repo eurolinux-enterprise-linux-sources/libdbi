@@ -9,7 +9,7 @@
 
 
 ${LIBTOOLIZE} --force --copy
-${ACLOCAL}
+${ACLOCAL} -I m4
 ${AUTOHEADER}
 ${AUTOMAKE} --add-missing
 

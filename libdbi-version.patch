@@ -1,0 +1,20 @@
+libdbi 0.8.4 increased the library soname version number from 0 to 1,
+but this seems rather inappropriate considering there was neither any
+functionality change nor a bump in the package's major version number.
+We will keep the soname where it was for now.
+
+
+diff -Naur libdbi-0.8.4.orig/configure libdbi-0.8.4/configure
+--- libdbi-0.8.4.orig/configure	2010-08-31 19:22:52.000000000 -0400
++++ libdbi-0.8.4/configure	2012-07-23 15:27:02.827240360 -0400
+@@ -2543,8 +2543,8 @@
+ 
+ 
+ 
+-LIB_CURRENT=1
+-LIB_REVISION=0
++LIB_CURRENT=0
++LIB_REVISION=5
+ LIB_AGE=0
+ 
+ 

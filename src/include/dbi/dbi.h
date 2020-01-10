@@ -97,8 +97,8 @@ typedef struct {
 typedef void (*dbi_conn_error_handler_func)(dbi_conn, void *);
 
 /* definitions of the library interface versions */
-#define LIBDBI_LIB_CURRENT 0
-#define LIBDBI_LIB_REVISION 5
+#define LIBDBI_LIB_CURRENT 1
+#define LIBDBI_LIB_REVISION 0
 #define LIBDBI_LIB_AGE 0
 
 /* values for the int in field_types[] */
